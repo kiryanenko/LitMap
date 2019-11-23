@@ -1,0 +1,55 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script src="{% static 'admin/js/core.js' %}?v={{ STATIC_VERSION }}"></script>
+    <script src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}?v={{ STATIC_VERSION }}"></script>
+    <script src="{% static 'admin/js/jquery.init.js' %}?v={{ STATIC_VERSION }}"></script>
+    <script src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}?v={{ STATIC_VERSION }}"></script>
+    <script src="{% static 'admin/js/actions.min.js' %}?v={{ STATIC_VERSION }}"></script>
+    <script src="{% static 'admin/js/urlify.js' %}?v={{ STATIC_VERSION }}"></script>
+    <script src="{% static 'admin/js/prepopulate.min.js' %}?v={{ STATIC_VERSION }}"></script>
+    <script src="{% static 'admin/js/vendor/xregexp/xregexp.min.js' %}?v={{ STATIC_VERSION }}"></script>
+{% endblock %}
+
+{% block content %}
+    <form method="post" class="form-horizontal" id="mailing-form">
+        <div class="inner-center-column">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <p class="errornote">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <fieldset class="module aligned first">
+                {% for field in form.visible_fields %}
+                    <div class="control-group form-row{% if field.errors %} {{ field|yesno:'error,first-error' }} errors{% endif %}{{ field|yesno:',multi-field-row' }}">
+                        {% if field.errors %}
+                            <ul class="errorlist">{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                        {% endif %}
+                        <label class="{% if field.field.required %}required{% endif %}">
+                            {{ field.label }} {% if field.field.required %}*{% endif %}
+                        </label>
+                        {{ field }}
+                        {% if field.field.help_text %}
+                            <p class="help">{{ field.field.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </fieldset>
+
+            <br>
+            <div class="submit-row">
+                <input type="hidden" name="action" value="{{ current_action }}">
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                <input class="btn" type="submit" name="apply" value="Отправить"/>
+            </div>
+            {{ form.media }}
+        </div>
+    </form>
+{% endblock %}
