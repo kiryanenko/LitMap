@@ -32,6 +32,8 @@ class Place(models.Model):
     x = models.FloatField('долгота')
     y = models.FloatField('широта')
 
+    visitors = models.ManyToManyField(User, related_name='visited_places')
+
     def get_url(self):
         return urljoin(settings.SITE_URL, reverse('places:place_detail', args=[self.pk]))
 
