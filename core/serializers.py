@@ -9,8 +9,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'rating', 'achievements')
-        read_only_fields = ('rating',)
+        fields = ('username', 'password', 'rating', 'achievements')
+        read_only_fields = ('rating', 'achievements')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
