@@ -24,11 +24,23 @@ class Place(models.Model):
         verbose_name = 'место'
         verbose_name_plural = 'места'
 
+    ext_id = models.CharField('Внешинй ID', max_length=255, blank=True)
+
+    DH_CENTER_SRC = 'DH-CENTER'
+    LITMAP_SRC = 'LitMap'
+    SOURCES = (
+        (DH_CENTER_SRC, 'DH-CENTER'),
+        (DH_CENTER_SRC, 'LitMap')
+    )
+    source = models.CharField(choices=SOURCES, max_length=12, default=LITMAP_SRC)
+
     title = models.CharField('заголовок', max_length=255)
     short_text = models.TextField('короткое описание', blank=True)
     text = models.TextField('текст', blank=True)
     tags = models.ManyToManyField(Tag, related_name='places', verbose_name='теги')
     image = models.ImageField('картинка', blank=True)
+    image_link = models.URLField('ссылка на картинку', blank=True)
+    wiki_link = models.URLField('Ссылка на wiki', blank=True)
     x = models.FloatField('долгота')
     y = models.FloatField('широта')
 
